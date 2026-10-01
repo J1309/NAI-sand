@@ -60,6 +60,7 @@ export function ChatbotWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastUserPromptRef = useRef<string>('');
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -72,6 +73,71 @@ export function ChatbotWidget() {
     }
   }, [isOpen, messages, streamingContent, scrollToBottom]);
 
+  // Fallback interactive simulation function
+  const runSimulationResponse = useCallback((promptText: string) => {
+    setAiState('streaming');
+    let response = '';
+    let options: { id: string; label: string }[] | undefined;
+    let chips: string[] | undefined;
+    let summaryCard: { label: string; value: string }[] | undefined;
+    let actionPair: Message['actionPair'] | undefined;
+
+    const lower = promptText.toLowerCase();
+
+    if (lower.includes('schedule') || lower.includes('call') || lower.includes('book')) {
+      response = 'Great! Here are the details for your technical consultation:';
+      summaryCard = [
+        { label: 'Consultation', value: '30-Min AI Architecture' },
+        { label: 'Focus', value: 'Autonomous Systems & RAG' },
+        { label: 'Engineer', value: 'Senior AI Specialist' },
+      ];
+      actionPair = {
+        cancelText: 'Cancel',
+        confirmText: 'Confirm Booking',
+        onConfirm: () => handleSend('Confirmed! Please proceed.'),
+        onCancel: () => handleSend('I would like to explore other options first.'),
+      };
+    } else if (lower.includes('swarm') || lower.includes('agent')) {
+      response = 'Our Autonomous Multi-Agent Swarms orchestrate tasks across your enterprise workflows with zero human bottleneck. What timeline are you considering?';
+      chips = ['2-3 Weeks', '1-2 Months', 'Exploring'];
+    } else if (lower.includes('governance') || lower.includes('retention') || lower.includes('security')) {
+      response = 'NAIR.AI Zero-Retention Architecture ensures zero model-side prompt caching and cryptographic memory isolation. Which tier fits your compliance needs?';
+      options = [
+        { id: '1', label: 'SOC2 & HIPAA Compliant VPC >' },
+        { id: '2', label: 'On-Premise Air-Gapped Cluster >' },
+      ];
+    } else {
+      response = 'NAIR.AI builds production-grade multi-agent swarms, zero-retention pipelines, and sovereign enterprise inference engines. How can we help your team?';
+      chips = ['Consulting Services', 'Zero Retention', 'Schedule Call'];
+    }
+
+    let index = 0;
+    const words = response.split(' ');
+    const interval = setInterval(() => {
+      index += 2;
+      setStreamingContent(words.slice(0, index).join(' '));
+      if (index >= words.length) {
+        clearInterval(interval);
+        setIsStreaming(false);
+        setAiState('idle');
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: 'resp-' + Date.now(),
+            role: 'assistant',
+            content: response,
+            options,
+            chips,
+            summaryCard,
+            actionPair,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          },
+        ]);
+        setStreamingContent('');
+      }
+    }, 35);
+  }, []);
+
   // Connect WebSocket to Python Backend
   useEffect(() => {
     let ws: WebSocket | null = null;
@@ -82,7 +148,22 @@ export function ChatbotWidget() {
         const defaultWsUrl = typeof window !== 'undefined' && window.location.protocol === 'https:'
           ? 'wss://localhost:8000/ws/chat'
           : 'ws://localhost:8000/ws/chat';
-        const wsUrl = (import.meta.env.VITE_WS_URL as string) || defaultWsUrl;
+        
+        const rawUrl = (import.meta.env.VITE_WS_URL as string)?.trim();
+        let wsUrl = defaultWsUrl;
+
+        if (rawUrl) {
+          // Normalize protocol: http -> ws, https -> wss
+          wsUrl = rawUrl.replace(/^http:\/\//, 'ws://').replace(/^https:\/\//, 'wss://');
+          if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
+            wsUrl = (typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'wss://' : 'ws://') + wsUrl;
+          }
+          // Automatically append /ws/chat if omitted
+          if (!wsUrl.includes('/ws/chat')) {
+            wsUrl = wsUrl.replace(/\/+$/, '') + '/ws/chat';
+          }
+        }
+
         ws = new WebSocket(wsUrl);
 
         ws.onopen = () => setWsConnected(true);
@@ -119,18 +200,9 @@ export function ChatbotWidget() {
                 return '';
               });
             } else if (data.type === 'error') {
-              setIsStreaming(false);
-              setAiState('idle');
-              setStreamingContent('');
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: 'err-' + Date.now(),
-                  role: 'assistant',
-                  content: 'Service note: ' + (data.content || 'Unable to connect to model.'),
-                  timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                },
-              ]);
+              // Gracefully fall back to rich presaved simulation if provider/API key error happens
+              console.warn('Backend returned service note, engaging fallback simulation:', data.content);
+              runSimulationResponse(lastUserPromptRef.current || 'services');
             }
           } catch (e) {
             console.error('Error handling WebSocket event:', e);
@@ -150,11 +222,13 @@ export function ChatbotWidget() {
       if (ws) ws.close();
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
     };
-  }, []);
+  }, [runSimulationResponse]);
 
   const handleSend = (textToSend?: string) => {
     const text = (textToSend || inputValue).trim();
     if (!text || isStreaming) return;
+
+    lastUserPromptRef.current = text;
 
     const userMsg: Message = {
       id: 'user-' + Date.now(),
@@ -178,69 +252,8 @@ export function ChatbotWidget() {
         })
       );
     } else {
-      // Clean interactive simulation following the reference redesign
       setTimeout(() => {
-        setAiState('streaming');
-        let response = '';
-        let options: { id: string; label: string }[] | undefined;
-        let chips: string[] | undefined;
-        let summaryCard: { label: string; value: string }[] | undefined;
-        let actionPair: Message['actionPair'] | undefined;
-
-        const lower = text.toLowerCase();
-
-        if (lower.includes('schedule') || lower.includes('call') || lower.includes('book')) {
-          response = 'Great! Here are the details for your technical consultation:';
-          summaryCard = [
-            { label: 'Consultation', value: '30-Min AI Architecture' },
-            { label: 'Focus', value: 'Autonomous Systems & RAG' },
-            { label: 'Engineer', value: 'Senior AI Specialist' },
-          ];
-          actionPair = {
-            cancelText: 'Cancel',
-            confirmText: 'Confirm Booking',
-            onConfirm: () => handleSend('Confirmed! Please proceed.'),
-            onCancel: () => handleSend('I would like to explore other options first.'),
-          };
-        } else if (lower.includes('swarm') || lower.includes('agent')) {
-          response = 'Our Autonomous Multi-Agent Swarms orchestrate tasks across your enterprise workflows with zero human bottleneck. What timeline are you considering?';
-          chips = ['2-3 Weeks', '1-2 Months', 'Exploring'];
-        } else if (lower.includes('governance') || lower.includes('retention') || lower.includes('security')) {
-          response = 'NAIR.AI Zero-Retention Architecture ensures zero model-side prompt caching and cryptographic memory isolation. Which tier fits your compliance needs?';
-          options = [
-            { id: '1', label: 'SOC2 & HIPAA Compliant VPC >' },
-            { id: '2', label: 'On-Premise Air-Gapped Cluster >' },
-          ];
-        } else {
-          response = 'NAIR.AI builds production-grade multi-agent swarms, zero-retention pipelines, and sovereign enterprise inference engines. How can we help your team?';
-          chips = ['Consulting Services', 'Zero Retention', 'Schedule Call'];
-        }
-
-        let index = 0;
-        const words = response.split(' ');
-        const interval = setInterval(() => {
-          index += 2;
-          setStreamingContent(words.slice(0, index).join(' '));
-          if (index >= words.length) {
-            clearInterval(interval);
-            setIsStreaming(false);
-            setAiState('idle');
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: 'resp-' + Date.now(),
-                role: 'assistant',
-                content: response,
-                options,
-                chips,
-                summaryCard,
-                actionPair,
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              },
-            ]);
-            setStreamingContent('');
-          }
-        }, 35);
+        runSimulationResponse(text);
       }, 500);
     }
   };
