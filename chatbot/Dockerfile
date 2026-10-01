@@ -19,4 +19,7 @@ RUN curl -L https://install.meilisearch.com | sh
 RUN sed -i 's/\r$//' /app/start.sh && \
     chmod +x /app/meilisearch /app/start.sh
 
+EXPOSE 8000
+ENV PORT=8000
+
 CMD ["/app/start.sh"]

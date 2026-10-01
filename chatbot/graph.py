@@ -10,7 +10,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 llm = ChatOpenAI(
     model="ibm-granite/granite-4.2-8b",
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("api_key"),
+    api_key=os.getenv("api_key") or os.getenv("OPENROUTER_API_KEY"),
     temperature=0.7,
     max_tokens=4096,
     extra_body={

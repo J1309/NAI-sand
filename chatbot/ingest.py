@@ -15,7 +15,7 @@ task = index.update_settings({
     "embedders": {
         "hf-inference": {
             "source": "rest",
-            "url":  "http://host.docker.internal:7870/embed",
+            "url": os.getenv("EMBED_URL", "http://127.0.0.1:7870/embed"),
             "dimensions": 256,
             "documentTemplate": "{{doc.title}}\n{{doc.text}}",
             "request": {
