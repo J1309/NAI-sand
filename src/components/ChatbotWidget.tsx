@@ -79,7 +79,11 @@ export function ChatbotWidget() {
 
     const connectWebSocket = () => {
       try {
-        ws = new WebSocket('ws://localhost:8000/ws/chat');
+        const defaultWsUrl = typeof window !== 'undefined' && window.location.protocol === 'https:'
+          ? 'wss://localhost:8000/ws/chat'
+          : 'ws://localhost:8000/ws/chat';
+        const wsUrl = (import.meta.env.VITE_WS_URL as string) || defaultWsUrl;
+        ws = new WebSocket(wsUrl);
 
         ws.onopen = () => setWsConnected(true);
         ws.onerror = () => setWsConnected(false);
