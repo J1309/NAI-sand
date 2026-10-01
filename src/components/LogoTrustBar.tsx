@@ -12,7 +12,7 @@ export const LogoTrustBar: React.FC = () => {
 
   return (
     <section className="py-12 bg-white border-b border-slate-200/80">
-      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-6 sm:px-8 lg:px-12 text-center">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
         <ScrollReveal y={20} duration={0.5}>
           <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-slate-600 font-bold mb-8">
             TRUSTED BY INDUSTRY LEADERS

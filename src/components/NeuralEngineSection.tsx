@@ -93,7 +93,7 @@ export const NeuralEngineSection: React.FC<NeuralEngineSectionProps> = ({
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-sky-300/15 blur-[130px] pointer-events-none" />
 
       {/* Main Container */}
-      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Section Header: Clean typography without top pill */}
         <ScrollReveal y={24} duration={0.6}>
@@ -241,23 +241,14 @@ export const NeuralEngineSection: React.FC<NeuralEngineSectionProps> = ({
                   </div>
                 </div>
 
-                {/* Quick Actions */}
                 <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-1">
                   <button
                     type="button"
-                    onClick={onOpenAssessment}
+                    onClick={onBookCall}
                     className="px-5 py-3 sm:px-7 sm:py-3.5 bg-[#DC2626] hover:bg-[#b91c1c] text-white font-mono text-xs sm:text-sm uppercase tracking-wider font-extrabold rounded-full transition-all shadow-xl shadow-red-600/25 flex items-center justify-center gap-2 cursor-pointer hover:scale-102"
                   >
-                    <span>Launch Diagnostic</span>
-                    <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={onBookCall}
-                    className="px-5 py-3 sm:px-6 sm:py-3.5 bg-[#1D4ED8] hover:bg-[#1e40af] text-white border border-[#1D4ED8] font-mono text-xs sm:text-sm uppercase tracking-wider font-extrabold rounded-full transition-all shadow-md shadow-blue-600/20 hover:scale-102 flex items-center justify-center cursor-pointer"
-                  >
                     <span>Book an AI strategy call</span>
+                    <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
                   </button>
                 </div>
 
