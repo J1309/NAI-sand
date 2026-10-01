@@ -14,7 +14,7 @@ export const CustomerSuccessSection: React.FC<CustomerSuccessSectionProps> = ({
       id="case-studies"
       className="py-14 sm:py-20 md:py-32 bg-[#0284C7] text-white relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Top Header */}
         <ScrollReveal y={28} duration={0.6}>

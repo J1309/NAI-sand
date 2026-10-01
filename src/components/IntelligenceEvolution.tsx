@@ -215,7 +215,7 @@ export const IntelligenceEvolution: React.FC<IntelligenceEvolutionProps> = ({
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[480px] h-[360px] bg-blue-300/15 blur-[140px] pointer-events-none rounded-full" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[440px] h-[320px] bg-sky-300/15 blur-[140px] pointer-events-none rounded-full" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Section Header: Clean typography without top pill */}
         <ScrollReveal y={24} duration={0.6}>

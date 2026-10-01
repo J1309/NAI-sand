@@ -61,9 +61,9 @@ export const Hero: React.FC<HeroProps> = ({ onBookCall }) => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 w-full max-w-[1536px] mx-auto px-4 sm:px-8 md:px-10 lg:pl-12 lg:pr-8 xl:pl-16 xl:pr-12 pt-20 sm:pt-32 lg:pt-36 pb-12 sm:pb-20 lg:pb-24 text-left"
+        className="relative z-10 w-full w-full max-w-[1720px] 2xl:max-w-[1840px] mx-auto px-6 sm:px-10 md:px-12 lg:pl-16 lg:pr-12 xl:pl-20 xl:pr-16 pt-20 sm:pt-32 lg:pt-36 pb-12 sm:pb-20 lg:pb-24 text-left"
       >
-        <div className="max-w-xl lg:max-w-[540px] xl:max-w-[580px]">
+        <div className="max-w-xl lg:max-w-[620px] xl:max-w-[700px]">
           
           {/* Strategic AI Implementation Value Proposition */}
           <motion.p

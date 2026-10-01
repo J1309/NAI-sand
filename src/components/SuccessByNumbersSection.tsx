@@ -108,7 +108,7 @@ export const SuccessByNumbersSection: React.FC = () => {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           
           {/* Left Column: Technical Narrative & Live Telemetry HUD (5 cols) */}

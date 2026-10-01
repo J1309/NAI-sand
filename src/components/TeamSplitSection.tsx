@@ -28,7 +28,7 @@ export const TeamSplitSection: React.FC = () => {
 
   return (
     <section className="py-14 sm:py-20 md:py-32 bg-white text-[#0A192F] border-b border-slate-200/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           
           {/* Left Column: Headline and Feature List (6 cols) */}

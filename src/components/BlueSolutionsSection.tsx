@@ -54,7 +54,7 @@ export const BlueSolutionsSection: React.FC<BlueSolutionsSectionProps> = ({
       {/* Translucent Geometric Loop Watermark */}
       <WatermarkPattern color="#FFFFFF" opacity={0.08} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Section Header */}
         <ScrollReveal y={28} duration={0.6}>

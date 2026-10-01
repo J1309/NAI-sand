@@ -1,3 +1,4 @@
+import { ChatbotWidget } from './components/ChatbotWidget';
 import { useState, useEffect } from 'react';
 import { LenisProvider } from './components/LenisProvider';
 import { Navbar, type PageRoute, type IndustrySector } from './components/Navbar';
@@ -302,6 +303,7 @@ export function App() {
           assessmentData={assessmentData}
         />
       </div>
+      <ChatbotWidget />
     </LenisProvider>
   );
 }

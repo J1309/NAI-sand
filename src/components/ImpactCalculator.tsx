@@ -26,7 +26,7 @@ export const ImpactCalculator: React.FC<ImpactCalculatorProps> = ({ onBookCall }
       id="calculator"
       className="py-14 sm:py-20 md:py-32 bg-white border-t border-b border-slate-200/80 text-[#0A192F] relative"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12">
         
         {/* Section Header */}
         <ScrollReveal y={28} duration={0.6}>

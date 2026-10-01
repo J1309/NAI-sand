@@ -197,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       }`}
     >
       <div
-        className={`max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between transition-all duration-300 ease-in-out ${
+        className={`w-full max-w-[1720px] 2xl:max-w-[1840px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-16 flex items-center justify-between transition-all duration-300 ease-in-out ${
           isScrolled ? 'h-16 sm:h-18' : 'h-18 sm:h-20'
         }`}
       >

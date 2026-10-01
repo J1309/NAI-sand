@@ -93,7 +93,7 @@ export const NeuralEngineSection: React.FC<NeuralEngineSectionProps> = ({
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-sky-300/15 blur-[130px] pointer-events-none" />
 
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1600px] 2xl:max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         
         {/* Section Header: Clean typography without top pill */}
         <ScrollReveal y={24} duration={0.6}>
