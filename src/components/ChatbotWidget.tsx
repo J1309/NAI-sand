@@ -145,16 +145,21 @@ export function ChatbotWidget() {
 
     const connectWebSocket = () => {
       try {
-        const defaultWsUrl = typeof window !== 'undefined' && window.location.protocol === 'https:'
-          ? 'wss://localhost:8000/ws/chat'
-          : 'ws://localhost:8000/ws/chat';
+        const isLocal = typeof window !== 'undefined' && (
+          window.location.hostname === 'localhost' || 
+          window.location.hostname === '127.0.0.1'
+        );
+
+        const defaultWsUrl = isLocal
+          ? (window.location.protocol === 'https:' ? 'wss://localhost:8000/ws/chat' : 'ws://localhost:8000/ws/chat')
+          : 'wss://nai-sand.onrender.com/ws/chat';
         
         const rawUrl = (import.meta.env.VITE_WS_URL as string)?.trim();
-        let wsUrl = defaultWsUrl;
+        let wsUrl = rawUrl || defaultWsUrl;
 
-        if (rawUrl) {
+        if (wsUrl) {
           // Normalize protocol: http -> ws, https -> wss
-          wsUrl = rawUrl.replace(/^http:\/\//, 'ws://').replace(/^https:\/\//, 'wss://');
+          wsUrl = wsUrl.replace(/^http:\/\//, 'ws://').replace(/^https:\/\//, 'wss://');
           if (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://')) {
             wsUrl = (typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'wss://' : 'ws://') + wsUrl;
           }
